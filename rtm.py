@@ -26,13 +26,13 @@ def fix_events(cal, tz):
 
 def fix_tasks(cal, tz):
     for todo in cal.todos:
-        todo.begin = _replace_timezone(todo.begin.datetime, tz)
-        todo.due = _replace_timezone(todo.due.datetime, tz)
-
         if todo.due:
             todo.begin = todo.due
         else:
             todo.due = todo.begin
+
+        todo.begin = _replace_timezone(todo.begin.datetime, tz)
+        todo.due = _replace_timezone(todo.due.datetime, tz)
 
         estimate = ical.parse_estimate(todo)
         todo.due = todo.begin + timedelta(minutes=estimate)
