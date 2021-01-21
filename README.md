@@ -7,13 +7,13 @@ rtm-calendar-fixer
 A Python3 scripts that fixes start/end/due time for events and tasks in Remember The Milk icalendars.
 
 For Events calendar:
-* Event due date => Event start date
-* Event start date + estimate => Event end date
+* Event due date => Event start date;
+* Event start date + estimate => Event end date.
 
 For Tasks calendar:
-* If: Task due date presents => Task begin date
-* Else: Task creation time => Task begin date
-* Task begin date + estimate => Task due date
+* If: Task due date presents => Task begin date;
+* Else: Task creation time => Task begin date;
+* Task begin date + estimate => Task due date.
 
 ### Run
 To run script follow this simple steps:
@@ -28,12 +28,14 @@ For easy setup you can create configuration file with this content:
 {
   "events": [
     {
+      "timezone": "Etc/GMT-4",
       "uri": "https://www.rememberthemilk.com/icalendar/youruriforeventcalendar",
       "save": "./rtm-events.ics"
     }
   ],
   "tasks": [
     {
+      "timezone": "Etc/GMT-4",
       "uri": "https://www.rememberthemilk.com/icalendar/yoururifortaskscalendar",
       "save": "./rtm-tasks.ics"
     }
@@ -42,4 +44,7 @@ For easy setup you can create configuration file with this content:
 ```
 
 In `uri` field paste URL for you calendar, and in `save` field select path, where to store new calendar in `ics` format.
+
+You can specify your timezone in `timezone` field.
+
 Use `events` collection for Events calendars and `tasks` collection for Tasks calendars.
