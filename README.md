@@ -8,7 +8,7 @@ A Python3 scripts that fixes start/end/due time for events and tasks in Remember
 
 For Events calendar:
 * Event due date => Event start date;
-* Event start date + estimate => Event end date.
+* Event due date + estimate => Event end date.
 
 For Tasks calendar:
 * If: Task due date presents => Task begin date;
