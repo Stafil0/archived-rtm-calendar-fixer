@@ -19,7 +19,7 @@ For Tasks calendar:
 To run script follow this simple steps:
 * install all packages from `requirements.txt` with `python -m pip install -r requirements.txt`;
 * set up your json config file;
-* set up cronjob, e.g. `*/15 * * * * python3.5 rtm.py -c config.json` to sync your local calendar with RTM;
+* set up cronjob, e.g. `*/15 * * * * python3 rtm.py -c config.json` to sync your local calendar with RTM;
 * point your iCal software to new ics file.
 
 ### Configuration
