@@ -2,6 +2,8 @@ rtm-calendar-fixer
 =============
 ###### Fix "Remember The Milk" calendars start/end/due dates.
 
+### TL;DR
+
 A Python3 scripts that fixes start/end/due time for events and tasks in Remember The Milk icalendars.
 
 For Events calendar:
@@ -13,14 +15,14 @@ For Tasks calendar:
 * Else: Task creation time => Task begin date
 * Task begin date + estimate => Task due date
 
-#### Run
+### Run
 To run script follow this simple steps:
 * install all packages from `requirements.txt` with `python -m pip install -r requirements.txt`;
 * set up your json config file;
 * set up cronjob, e.g. `*/15 * * * * python3.5 rtm.py -c config.json` to sync your local calendar with RTM;
 * point your iCal software to new ics file.
 
-#### Configuration
+### Configuration
 For easy setup you can create configuration file with this content:
 ```json
 {
