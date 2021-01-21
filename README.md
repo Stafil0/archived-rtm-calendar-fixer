@@ -45,6 +45,6 @@ For easy setup you can create configuration file with this content:
 
 In `uri` field paste URL for you calendar, and in `save` field select path, where to store new calendar in `ics` format.
 
-You can specify your timezone in `timezone` field.
+You can specify your timezone in `timezone` field. All avaliable timezone formats you can find in `pytz.all_timezones`.
 
 Use `events` collection for Events calendars and `tasks` collection for Tasks calendars.
