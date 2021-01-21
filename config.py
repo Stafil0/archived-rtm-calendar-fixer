@@ -33,18 +33,21 @@ def to_class(c: Type[T], x: Any) -> dict:
 class ICal:
     uri: str
     save: str
+    timezone: str
 
     @staticmethod
     def from_dict(obj: Any) -> 'ICal':
         assert isinstance(obj, dict)
         uri = from_str(obj.get("uri"))
         save = from_str(obj.get("save"))
-        return ICal(uri, save)
+        timezone = from_str(obj.get("timezone"))
+        return ICal(uri, save, timezone)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["uri"] = from_str(self.uri)
         result["save"] = from_str(self.save)
+        result["timezone"] = from_str(self.timezone)
         return result
 
 
