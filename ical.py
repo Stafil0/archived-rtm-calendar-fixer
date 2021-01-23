@@ -5,16 +5,17 @@ from ics import Calendar
 
 minutes = 'M'
 hours = 'H'
-estimate_pattern = re.compile(rf'(\d+)([{hours}{minutes}])$', re.M)
+estimate_pattern = re.compile(rf'((\d+)[{hours}])?((\d+)[{minutes}])?$', re.M)
 
 
 def parse_estimate(event):
     description = event.description
     search = estimate_pattern.search(description)
     if search:
-        estimate = int(search.group(1))
-        time = search.group(2)
-        return estimate * 60 if time == hours else estimate
+        estimate_hours = search.group(2) or 0
+        estimate_minutes = search.group(4) or 0
+        estimate = int(estimate_minutes) + int(estimate_hours) * 60
+        return estimate
     return 0
 
 
