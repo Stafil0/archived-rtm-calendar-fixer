@@ -31,15 +31,14 @@ For easy setup you can create configuration file with this content:
       "timezone": "Etc/GMT-4",
       "uri": "https://www.rememberthemilk.com/icalendar/youruriforeventcalendar",
       "save": "./rtm-events.ics",
-      "estimate_only": false
+      "with_estimate": false
     }
   ],
   "tasks": [
     {
       "timezone": "Etc/GMT-4",
       "uri": "https://www.rememberthemilk.com/icalendar/yoururifortaskscalendar",
-      "save": "./rtm-tasks.ics",
-      "estimate_only": true
+      "save": "./rtm-tasks.ics"
     }
   ]
 }
@@ -51,4 +50,5 @@ You can specify your timezone in `timezone` field. All avaliable timezone format
 
 Use `events` collection for Events calendars and `tasks` collection for Tasks calendars.
 
-Specify `estimate_only` if you want to remove (or not) tasks\events without estimate.
+Specify `with_estimate` as `true` if you want to remove tasks\events without estimate and vice versa for `false`.
+Param is optional, so if you `not specify it`, nothing will be removed.
