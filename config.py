@@ -19,6 +19,11 @@ def from_str(x: Any) -> str:
     return x
 
 
+def from_bool(x: Any) -> bool:
+    assert isinstance(x, bool)
+    return x
+
+
 def from_list(f: Callable[[Any], T], x: Any) -> List[T]:
     assert isinstance(x, list)
     return [f(y) for y in x]
@@ -34,6 +39,7 @@ class ICal:
     uri: str
     save: str
     timezone: str
+    estimate_only: bool
 
     @staticmethod
     def from_dict(obj: Any) -> 'ICal':
@@ -41,13 +47,15 @@ class ICal:
         uri = from_str(obj.get("uri"))
         save = from_str(obj.get("save"))
         timezone = from_str(obj.get("timezone"))
-        return ICal(uri, save, timezone)
+        estimate_only = from_bool(obj.get("estimate_only"))
+        return ICal(uri, save, timezone, estimate_only)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["uri"] = from_str(self.uri)
         result["save"] = from_str(self.save)
         result["timezone"] = from_str(self.timezone)
+        result["estimate_only"] = from_bool(self.estimate_only)
         return result
 
 
