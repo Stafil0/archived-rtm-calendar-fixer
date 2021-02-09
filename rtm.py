@@ -14,11 +14,11 @@ def _replace_timezone(dt, zone):
     return dt.replace(tzinfo=timezone(zone))
 
 
-def fix_events(cal, tz, estimate_only):
+def fix_events(cal, tz, with_estimate):
     events = set()
     for event in cal.events:
         estimate = ical.parse_estimate(event)
-        if estimate_only and not estimate:
+        if with_estimate is True and not estimate or with_estimate is False and estimate:
             continue
 
         event.begin = _replace_timezone(event.begin.datetime, tz)
@@ -29,11 +29,11 @@ def fix_events(cal, tz, estimate_only):
     return cal
 
 
-def fix_tasks(cal, tz, estimate_only):
+def fix_tasks(cal, tz, with_estimate):
     todos = set()
     for todo in cal.todos:
         estimate = ical.parse_estimate(todo)
-        if estimate_only and not estimate:
+        if with_estimate is True and not estimate or with_estimate is False and estimate:
             continue
 
         if todo.due:
@@ -52,7 +52,7 @@ def fix_tasks(cal, tz, estimate_only):
 
 async def fix_calendar(cal, fixer):
     old_calendar = await ical.get_calendar(cal.uri)
-    new_calendar = fixer(old_calendar, cal.timezone, cal.estimate_only)
+    new_calendar = fixer(old_calendar, cal.timezone, cal.with_estimate)
     ical.save_calendar(new_calendar, cal.save)
 
 
