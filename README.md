@@ -30,14 +30,16 @@ For easy setup you can create configuration file with this content:
     {
       "timezone": "Etc/GMT-4",
       "uri": "https://www.rememberthemilk.com/icalendar/youruriforeventcalendar",
-      "save": "./rtm-events.ics"
+      "save": "./rtm-events.ics",
+      "estimate_only": false
     }
   ],
   "tasks": [
     {
       "timezone": "Etc/GMT-4",
       "uri": "https://www.rememberthemilk.com/icalendar/yoururifortaskscalendar",
-      "save": "./rtm-tasks.ics"
+      "save": "./rtm-tasks.ics",
+      "estimate_only": true
     }
   ]
 }
@@ -48,3 +50,5 @@ In `uri` field paste URL for you calendar, and in `save` field select path, wher
 You can specify your timezone in `timezone` field. All avaliable timezone formats you can find in `pytz.all_timezones`.
 
 Use `events` collection for Events calendars and `tasks` collection for Tasks calendars.
+
+Specify `estimate_only` if you want to remove (or not) tasks\events without estimate.
