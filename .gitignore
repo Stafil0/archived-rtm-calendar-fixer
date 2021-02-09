@@ -351,3 +351,9 @@ MigrationBackup/
 
 # IDEA files
 .idea/
+
+# Config
+config.json
+
+# ICS files
+*.ics
