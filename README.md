@@ -26,19 +26,33 @@ To run script follow this simple steps:
 For easy setup you can create configuration file with this content:
 ```json
 {
-  "events": [
+  "fix": [
     {
-      "timezone": "Etc/GMT-4",
-      "uri": "https://www.rememberthemilk.com/icalendar/youruriforeventcalendar",
-      "save": "./rtm-events.ics",
-      "with_estimate": false
+      "calendar": {
+        "timezone": "Etc/GMT-3",
+        "uri": "https://www.rememberthemilk.com/icalendar/some/calendar",
+        "typo": "events"
+      },
+      "save": "./fixed.ics"
     }
   ],
-  "tasks": [
+  "merge": [
     {
-      "timezone": "Etc/GMT-4",
-      "uri": "https://www.rememberthemilk.com/icalendar/yoururifortaskscalendar",
-      "save": "./rtm-tasks.ics"
+      "calendars": [
+        {
+          "timezone": "Etc/GMT-3",
+          "uri": "https://www.rememberthemilk.com/icalendar/some/calendar",
+          "typo": "tasks",
+          "with_estimate": false
+        },
+        {
+          "timezone": "Etc/GMT-3",
+          "uri": "https://www.rememberthemilk.com/icalendar/some/calendar",
+          "typo": "events",
+          "with_estimate": true
+        }
+      ],
+      "save": "./merged.ics"
     }
   ]
 }
@@ -48,7 +62,9 @@ In `uri` field paste URL for you calendar, and in `save` field select path, wher
 
 You can specify your timezone in `timezone` field. All avaliable timezone formats you can find in `pytz.all_timezones`.
 
-Use `events` collection for Events calendars and `tasks` collection for Tasks calendars.
+Use `events` typo for Events calendars and `tasks` typo for Tasks calendars.
 
 Specify `with_estimate` as `true` if you want to remove tasks\events without estimate and vice versa for `false`.
 Param is optional, so if you `not specify it`, nothing will be removed.
+
+To just fix your calendar, setup it in `fix` section. If you also want to merge multiple calendars into one, put them in `merge` section.
