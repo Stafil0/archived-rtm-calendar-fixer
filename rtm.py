@@ -1,17 +1,22 @@
 import asyncio
 import argparse
 from datetime import timedelta
-from pytz import timezone
 
-import ical
-import config
+from base import ical
+from base.calendar import Calendar
+from base.tz import replace_timezone
+from configs import config
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--config', type=str, required=True, help='path to json config file')
+parser.add_argument('-c', '--config', type=str, required=True, help='path to json configs file')
 
 
-def _replace_timezone(dt, zone):
-    return dt.replace(tzinfo=timezone(zone))
+def _get_fixer(cal):
+    if cal.typo == Calendar.Event:
+        return fix_events
+    if cal.typo == Calendar.Tasks:
+        return fix_tasks
+    raise ValueError(f"Incorrect calendar type '{cal.typo}'")
 
 
 def fix_events(cal, tz, with_estimate):
@@ -21,8 +26,8 @@ def fix_events(cal, tz, with_estimate):
         if with_estimate is True and not estimate or with_estimate is False and estimate:
             continue
 
-        event.begin = _replace_timezone(event.begin.datetime, tz)
-        event.end = _replace_timezone(event.end.datetime, tz)
+        event.begin = replace_timezone(event.begin.datetime, tz)
+        event.end = replace_timezone(event.end.datetime, tz)
         event.end = event.begin + timedelta(minutes=estimate)
         events.add(event)
     cal.events = events
@@ -41,8 +46,8 @@ def fix_tasks(cal, tz, with_estimate):
         else:
             todo.due = todo.begin
 
-        todo.begin = _replace_timezone(todo.begin.datetime, tz)
-        todo.due = _replace_timezone(todo.due.datetime, tz)
+        todo.begin = replace_timezone(todo.begin.datetime, tz)
+        todo.due = replace_timezone(todo.due.datetime, tz)
 
         todo.due = todo.begin + timedelta(minutes=estimate)
         todos.add(todo)
@@ -50,18 +55,40 @@ def fix_tasks(cal, tz, with_estimate):
     return cal
 
 
-async def fix_calendar(cal, fixer):
+async def fix_calendar(cal):
+    fixer = _get_fixer(cal)
     old_calendar = await ical.get_calendar(cal.uri)
-    new_calendar = fixer(old_calendar, cal.timezone, cal.with_estimate)
-    ical.save_calendar(new_calendar, cal.save)
+    return fixer(old_calendar, cal.timezone, cal.with_estimate)
+
+
+def merge_calendars(cals):
+    if not cals:
+        return None
+
+    cal = cals[0]
+    todos = set(todo for c in cals for todo in c.todos)
+    events = set(event for c in cals for event in c.events)
+
+    cal.todos = todos
+    cal.events = events
+    return cal
 
 
 async def main(args):
     calendars = config.read_config(args.config)
-    for cal in calendars.events:
-        await fix_calendar(cal, fix_events)
-    for cal in calendars.tasks:
-        await fix_calendar(cal, fix_tasks)
+
+    for fix in calendars.fix:
+        new_calendar = await fix_calendar(fix.calendar)
+        ical.save_calendar(new_calendar, fix.save)
+
+    for merge in calendars.merge:
+        calendars = []
+        for calendar in merge.calendars:
+            new_calendar = await fix_calendar(calendar)
+            calendars.append(new_calendar)
+        new_calendar = merge_calendars(calendars)
+        if new_calendar:
+            ical.save_calendar(new_calendar, merge.save)
 
 
 if __name__ == '__main__':
